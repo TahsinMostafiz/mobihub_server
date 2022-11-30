@@ -154,6 +154,13 @@ async function run() {
       const result = await usersCollection.updateOne(filter, updateDoc, option);
       res.send(result);
     });
+
+    // Products post api (Products information save to database)
+    app.post("/products", verifyJWT, async (req, res) => {
+      const product = req.body;
+      const result = await phonesCollections.insertOne(product);
+      res.send(result);
+    });
   } finally {
   }
 }
