@@ -155,6 +155,13 @@ async function run() {
       res.send(result);
     });
 
+    // products get api
+    app.get("/products", verifyJWT, async (req, res) => {
+      const query = {};
+      const result = await phonesCollections.find(query).toArray();
+      res.send(result);
+    });
+
     // Products post api (Products information save to database)
     app.post("/products", verifyJWT, async (req, res) => {
       const product = req.body;
