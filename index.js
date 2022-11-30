@@ -47,9 +47,27 @@ async function run() {
       res.send(result);
     });
 
+    //booking get api
+    app.get("/bookings", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const bookings = await bookingsCollections.find(query).toArray();
+      res.send(bookings);
+    });
+
     // bookings post api
     app.post("/bookings", async (req, res) => {
       const booking = req.body;
+      const query = {
+        name: booking.name,
+        email: booking.email,
+      };
+      const alreadyBooked = await bookingsCollections.find(query).toArray();
+
+      if (alreadyBooked.length) {
+        const message = `You already booked ${booking.name}`;
+        return res.send({ acknowledged: false, message });
+      }
       const result = await bookingsCollections.insertOne(booking);
       res.send(result);
     });
