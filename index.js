@@ -142,7 +142,7 @@ async function run() {
     });
 
     //update user
-    app.put("/users/admin/:id", verifyJWT, async (req, res) => {
+    app.put("/users/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
       const option = { upsert: true };
@@ -166,6 +166,13 @@ async function run() {
     app.post("/products", verifyJWT, async (req, res) => {
       const product = req.body;
       const result = await phonesCollections.insertOne(product);
+      res.send(result);
+    });
+    //Delete a product from database
+    app.delete("/products/:id", verifyJWT, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await phonesCollections.deleteOne(filter);
       res.send(result);
     });
   } finally {
